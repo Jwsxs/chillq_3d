@@ -1,0 +1,1 @@
+draw_rectangle(x - 5, y - 5, x + 5, y + 5, true);
