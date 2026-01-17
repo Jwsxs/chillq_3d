@@ -5,10 +5,10 @@ z = oPlayer.z + 8;
 if (keyboard_check(vk_shift) && keyboard_check_pressed(vk_escape))
 	game_end();
 
-window_mouse_set(window_get_width() / 2, window_get_height() / 2);
+window_mouse_set(RM_HALF_WIDTH, RM_HALF_HEIGHT);
 
-yaw += -msens * (window_mouse_get_x() - window_get_width() / 2);
-pitch += msens * (window_mouse_get_y() - window_get_height() / 2);
+yaw += -msens * (window_mouse_get_x() - RM_HALF_WIDTH);
+pitch += msens * (window_mouse_get_y() - RM_HALF_WIDTH);
 
 if (yaw > 360)
 	yaw = 0;

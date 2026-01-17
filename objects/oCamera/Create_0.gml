@@ -1,5 +1,5 @@
-#macro WIN_HALF_WIDTH window_get_width() / 2;
-#macro WIN_HALF_HEIGHT window_get_height	() / 2;
+RM_HALF_WIDTH = room_width / 2;
+RM_HALF_HEIGHT = room_height / 2;
 
 x = oPlayer.x;
 y = oPlayer.y;
