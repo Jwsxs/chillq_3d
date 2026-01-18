@@ -26,6 +26,7 @@ for (var px = 0; px < ww; px += step) {
 	deltaDistX = (rayDirX == 0) ? 100 : abs(1 / rayDirX);
 	deltaDistY = (rayDirY == 0) ? 100 : abs(1 / rayDirY);
 
+    //player pos according to grid
 	mapX = floor(posX);
 	mapY = floor(posY);
 	
