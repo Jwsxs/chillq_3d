@@ -36,6 +36,7 @@
   "name":"chillq 3d",
   "resources":[
     {"id":{"name":"oCamera","path":"objects/oCamera/oCamera.yy",},},
+    {"id":{"name":"oMap","path":"objects/oMap/oMap.yy",},},
     {"id":{"name":"oPlayer","path":"objects/oPlayer/oPlayer.yy",},},
     {"id":{"name":"oSquare","path":"objects/oSquare/oSquare.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},

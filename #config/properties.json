@@ -1,6 +1,6 @@
 {
     "GMEdit-Constructor":{
-        "runtimeReleaseChannel":"Beta",
-        "runtimeVersion":"runtime-2024.1400.2.926"
+        "runtimeReleaseChannel":"Stable",
+        "runtimeVersion":"runtime-2024.14.2.256"
     }
 }

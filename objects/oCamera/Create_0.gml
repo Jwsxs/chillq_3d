@@ -5,6 +5,9 @@ x = oPlayer.x;
 y = oPlayer.y;
 z = oPlayer.z + 8;
 
+planeX = 0;
+planeY = .66;
+
 pitch = 0; //y axis - horizontal
 yaw = 0; //z axis - vertical
 
