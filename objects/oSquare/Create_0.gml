@@ -1,4 +1,2 @@
-x1 = -47;
-x2 = +47;
-y1 = -47;
-y2 = +47;
+x = floor(x / oMap.cell_size) * oMap.cell_size;
+y = floor(y / oMap.cell_size) * oMap.cell_size;
