@@ -1,5 +1,7 @@
-x = 15;
-y = 15;
+x = 28;
+x = floor(x / oMap.cell_size) * oMap.cell_size;
+y = 28;
+y = floor(y / oMap.cell_size) * oMap.cell_size
 z = 0;
 
-instance_create_depth(x, y, 1, oCamera);
+instance_create_layer(x, y, "Player", oCamera);
