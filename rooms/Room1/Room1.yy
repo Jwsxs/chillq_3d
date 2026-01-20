@@ -19,8 +19,8 @@
   ],
   "name":"Room1",
   "parent":{
-    "name":"chillq 3d",
-    "path":"chillq 3d.yyp",
+    "name":"Rooms",
+    "path":"folders/Rooms.yy",
   },
   "parentRoom":null,
   "physicsSettings":{

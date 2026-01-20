@@ -26,7 +26,7 @@ var look_down_key = keyboard_check(vk_down);
 var look_left_key = keyboard_check(vk_left);
 var look_right_key = keyboard_check(vk_right);
 
-if (look_up_key) oCamera.pitch += -oCamera.msens * 50;
-if (look_down_key) oCamera.pitch -= -oCamera.msens * 50;
+if (look_up_key) oCamera.pitch -= -oCamera.msens * 50;
+if (look_down_key) oCamera.pitch += -oCamera.msens * 50;
 if (look_right_key) oCamera.yaw += -oCamera.msens * 50;
 if (look_left_key) oCamera.yaw -= -oCamera.msens * 50;

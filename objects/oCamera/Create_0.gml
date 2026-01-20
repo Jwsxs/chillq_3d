@@ -12,3 +12,8 @@ pitch = 0; //y axis - horizontal
 yaw = 0; //z axis - vertical
 
 msens = 1.75 / 100;
+
+perpWallDist = 0;
+
+dirX = 0;
+dirY = 0;

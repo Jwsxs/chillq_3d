@@ -4,22 +4,29 @@ if (oBrain.debugMode) {
 	draw_line(x, y, x + line_size * dcos(yaw), y - line_size * dsin(yaw));
 }
 
-var posX = oPlayer.x / oMap.cell_size;
-var posY = oPlayer.y / oMap.cell_size;
-
-var dirX = dcos(yaw);
-var dirY = -dsin(yaw);
-
+//base da câmera
+//direção
+dirX = dcos(yaw);
+dirY = -dsin(yaw);
+//fov
 planeX = -dirY * .66;
 planeY = dirX * .66;
 
 var ww = window_get_width();
 var wh = window_get_height()
 
-var step = 25;
+var step = 32;
 
+var rayIndex = 0;
+var rays = ceil(ww / step);
+   
+zBuffer = array_create(ceil(ww / step));
+//for walls
 for (var px = 0; px < ww; px += step) {
-	cameraX = 2 * px / ww - 1;
+    var posX = oPlayer.x / oMap.cell_size;
+    var posY = oPlayer.y / oMap.cell_size;
+
+    cameraX = 2 * rayIndex / rays - 1;
 	rayDirX = dirX + planeX * cameraX;
 	rayDirY = dirY + planeY * cameraX;
 	
@@ -77,15 +84,13 @@ for (var px = 0; px < ww; px += step) {
 		}
 	}
 	
-	perpWallDist = 0;
-	
 	if (side == 0) perpWallDist = (sideDistX - deltaDistX);
 	else perpWallDist = (sideDistY - deltaDistY);
 	
 	perpWallDist = max(perpWallDist, 0.0001);
 	lineHeight = (wh / perpWallDist);
 
-	var pitch_offset = pitch * 4;
+	var pitch_offset = pitch * 10; // set pitch working
 	
 	drawStart = -lineHeight / 2 + wh / 2 + pitch_offset;
 	drawEnd = lineHeight / 2 + wh / 2 + pitch_offset;
@@ -95,19 +100,69 @@ for (var px = 0; px < ww; px += step) {
 	
 	var maxDist = 20;
 	var shade = 1 - (perpWallDist / maxDist);
-	shade = clamp(shade, 0.15, 1);
+	shade = clamp(shade, 0, 1);
 	
 	var baseCol = c_white;
 	draw_set_color(merge_color(c_black, baseCol, shade));
 	
-	draw_line(px, drawStart, px, drawEnd);
+	if (perpWallDist < 100) draw_line(px, drawStart, px, drawEnd);
+        
+    zBuffer[rayIndex] = perpWallDist;
+    rayIndex++;
 }
 
-/*
-draw_triangle(
-    x, y,
-	x + tr_height * dcos(yaw + tr_base_r), y - tr_height * dsin(yaw + tr_base_r),
-	x + tr_height * dcos(yaw - tr_base_r), y - tr_height * dsin(yaw - tr_base_r),
-	true
-);
-*/
+
+//for obj
+with (oEnemy) { 
+    //agora não é grid, mas espaço preciso pra posição do obj
+    
+    //billboard sprite
+    
+    var objRelX = (x - oPlayer.x) / oMap.cell_size;
+    var objRelY = (y - oPlayer.y) / oMap.cell_size;
+    
+    //world to screen point
+    var det = 1 / (oCamera.planeX * oCamera.dirY - oCamera.dirX * oCamera.planeY);
+    
+    var transX = det * (oCamera.dirY * objRelX - oCamera.dirX * objRelY); // deslocamento lateral
+    var transY = det * (-oCamera.planeY * objRelX + oCamera.planeX * objRelY); // profundidade
+    
+    if (transY <= 0) exit;
+       
+    var screenX = (ww * 0.5) * (1 + transX / transY);
+    var rayCol = floor(screenX / step);
+     
+    //só desenhar enquanto visível
+    if (rayCol < 0 || rayCol >= array_length(oCamera.zBuffer)) exit;
+    
+    if (transY >= oCamera.zBuffer[rayCol]) exit;
+    
+    var spriteH = abs(wh / transY);
+    var spriteW = spriteH;
+    
+    var drawY = (wh * 0.5) - (spriteH * 0.5);
+    
+    //pitch funcionando
+    var pitch_offset = oCamera.pitch * 10;
+    
+    var maxDist = 20;
+    var shade = 1 - (transY / maxDist)
+    shade = clamp(shade, 0, 1);
+    
+    draw_set_colour(merge_colour(c_black, c_white, shade));
+    
+    //escala
+    scale = (spriteH / sprite_get_height(self.sprite_index));
+    
+    draw_sprite_ext(
+        sEnemy,
+        0,
+        screenX,
+        drawY + pitch_offset,
+        scale,
+        scale,
+        0,
+        merge_colour(c_black, c_white, shade),
+        1
+    );
+}

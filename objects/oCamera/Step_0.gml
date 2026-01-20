@@ -16,3 +16,4 @@ pitch -= msens * (my - RM_HALF_HEIGHT);
 yaw = (yaw + 360) mod 360;
 
 pitch = clamp(pitch, -300, 300);
+
