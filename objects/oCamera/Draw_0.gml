@@ -15,7 +15,7 @@ planeY = dirX * .66;
 var ww = window_get_width();
 var wh = window_get_height()
 
-var step = 32;
+var step = 2;
 
 var rayIndex = 0;
 var rays = ceil(ww / step);
@@ -130,15 +130,16 @@ with (oEnemy) {
     if (transY <= 0) exit;
        
     var screenX = (ww * 0.5) * (1 + transX / transY);
-    var rayCol = floor(screenX / step);
-     
-    //só desenhar enquanto visível
-    if (rayCol < 0 || rayCol >= array_length(oCamera.zBuffer)) exit;
-    
-    if (transY >= oCamera.zBuffer[rayCol]) exit;
+      
+    //if (transY >= oCamera.zBuffer[rayCol]) exit;
     
     var spriteH = abs(wh / transY);
     var spriteW = spriteH;
+    
+    var spriteHalfW = spriteW * .5;
+    
+    var drawStartX = floor(screenX - spriteHalfW);
+    var drawEndX = floor(screenX + spriteHalfW);
     
     var drawY = (wh * 0.5) - (spriteH * 0.5);
     
@@ -154,15 +155,31 @@ with (oEnemy) {
     //escala
     scale = (spriteH / sprite_get_height(self.sprite_index));
     
-    draw_sprite_ext(
-        sEnemy,
-        0,
-        screenX,
-        drawY + pitch_offset,
-        scale,
-        scale,
-        0,
-        merge_colour(c_black, c_white, shade),
-        1
-    );
+    //match com step da renderização do room, mesmo "shaders"
+    for (var stripe = drawStartX; stripe < drawEndX; stripe += step) {
+        var rayCol = floor(screenX / step);
+        
+        //só desenhar enquanto visível
+        if (rayCol < 0 || rayCol >= array_length(oCamera.zBuffer)) exit;
+        
+        //se tiver atrás da parede, não desenha
+        if (transY >= oCamera.zBuffer[rayCol]) continue;
+        
+        var texX = ((stripe - drawStartX) / (drawEndX - drawStartX)) * sprite_get_width(self.sprite_index);
+        
+        draw_sprite_part_ext(
+            sEnemy,
+            0,
+            texX,
+            0,
+            1,
+            sprite_height,
+            stripe,
+            drawY + pitch_offset,
+            scale,
+            scale,
+            merge_colour(c_black, c_white, shade),
+            1
+        );
+    }
 }
